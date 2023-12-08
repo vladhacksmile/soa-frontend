@@ -14,17 +14,6 @@ import {LazyLoadEvent, MessageService} from "primeng/api";
 })
 export class OrganizationComponent implements OnInit {
   form!: FormGroup;
-
-  organizationData: Organization = {
-    id: 0,
-    name: "",
-    coordinateX: 0,
-    coordinateY: 0,
-    creationDate: "",
-    annualTurnover: 0,
-    type: OrganizationType.PUBLIC,
-    officialAddress: ""
-  };
   info: any;
   loading: boolean = false;
   totalRecords: number = 0;
@@ -36,6 +25,8 @@ export class OrganizationComponent implements OnInit {
   pageSize!: number;
   visibleCreate!: boolean;
   visibleEdit!: boolean;
+  visibleCountLowerAnnualTurnover!: boolean;
+  countLowerAnnualTurnoverValue: number = 0;
   first = 0;
   rows = 10;
   constructor(
@@ -50,7 +41,8 @@ export class OrganizationComponent implements OnInit {
       creationDate: "",
       annualTurnover: 0,
       type: OrganizationType.PUBLIC,
-      officialAddress: ""
+      officialAddress: "",
+      annuaTurnoverLower: 0
     })
   }
 
@@ -195,6 +187,10 @@ export class OrganizationComponent implements OnInit {
     this.visibleCreate = !this.visibleCreate;
   }
 
+  toggleCountLowerAnnualTurnover() {
+    this.visibleCountLowerAnnualTurnover = !this.visibleCountLowerAnnualTurnover;
+  }
+
   closeCreate(event: any) {
     this.toggleEdit();
   }
@@ -228,9 +224,28 @@ export class OrganizationComponent implements OnInit {
   organizationType = ["PUBLIC", "GOVERNMENT", "TRUST", "PRIVATE_LIMITED_COMPANY", "OPEN_JOINT_STOCK_COMPANY"];
   selectedType: any;
 
-
   countLowerAnnualTurnover() {
-
+    this.organizationService.countLowerAnnualTurnover(this.form.value.annuaTurnoverLower).subscribe(
+      data => {
+        let description = data.description;
+        let status = data.status;
+        let result = data.object;
+        if (status != undefined && status == "OK") {
+          this.msg.add({severity:'success', summary: status, detail: description != undefined ? description : 'Меньше заданного ' + result});
+          if (result != undefined) {
+            this.countLowerAnnualTurnoverValue = result;
+          }
+          this.ngOnInit();
+          this.toggleCountLowerAnnualTurnover();
+        } else if (status != undefined) {
+          this.msg.add({severity:'error', summary: status, detail: description != undefined ? description : 'Неизвестная ошибка!'});
+        } else {
+          this.msg.add({severity: 'error', summary: 'Сообщение', detail: 'Неизвестная ошибка data!'});
+        }
+      }, error => {
+        this.dispatchError(error);
+      }
+    );
   }
 
   findSubstring() {
