@@ -1,8 +1,9 @@
 <p-toast></p-toast>
 <div class="header">
   <p-button (click)="showCreate()" icon="pi pi-external-link" label="Добавить организацию"></p-button>
-  <!--<p-button (click)="deleteAction()">Удалить</p-button>-->
   <div class = header-buttons>
+    <p-dropdown [options]="sortingType" [(ngModel)]="selectedSortingType" [showClear]="true" placeholder="Тип сортировки"></p-dropdown>
+    <p-dropdown [options]="sortingField" [(ngModel)]="selectedSortingField" [showClear]="true" placeholder="Поле для сортировки"></p-dropdown>
     <div class="p-input-icon-left">
       <i class="pi pi-search"></i>
       <input type="text" pInputText placeholder="Global Search" />
@@ -81,7 +82,7 @@
         </span>
 
         <div class="organization-input-form">
-          <p-dropdown [options]="organizationType" [(ngModel)]="editOrganizationType" [showClear]="true" placeholder="Тип организации"></p-dropdown>
+          <p-dropdown [options]="organizationType" [(ngModel)]="editOrganizationType" [showClear]="false" placeholder="Тип организации"></p-dropdown>
         </div>
 
         <span class="p-float-label organization-input-form">

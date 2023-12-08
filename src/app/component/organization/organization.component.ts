@@ -227,6 +227,10 @@ export class OrganizationComponent implements OnInit {
   protected readonly OrganizationType = OrganizationType;
   organizationType = ["PUBLIC", "GOVERNMENT", "TRUST", "PRIVATE_LIMITED_COMPANY", "OPEN_JOINT_STOCK_COMPANY"];
   selectedType: any;
+  sortingType = ["По-возрастанию", "По-убыванию"];
+  sortingField = ["ID", "Имя", "X", "Y", "Дата создания", "Годовой оборот", "Тип", "Адрес"];
+  selectedSortingType: any;
+  selectedSortingField: any;
 
 
   countLowerAnnualTurnover() {
