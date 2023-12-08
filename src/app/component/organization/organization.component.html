@@ -1,0 +1,68 @@
+<p-button (click)="showCreate()" icon="pi pi-external-link" label="Добавить"></p-button>
+<p-button (click)="deleteAction()">Удалить</p-button>
+<p-dialog header="Добавление организации" [(visible)]="visibleCreate" [modal]="true" [draggable]="true" [resizable]="false">
+    <form name="form" [formGroup]="form" (submit)="onSubmit()" #f="ngForm">
+      <div class="flex flex-wrap align-items-center justify-content-center">
+        <div class="pt-5 bg-primary-100 w-12rem m-3 border-round">
+          <div class="border-round-bottom bg-primary font-bold p-3 flex align-items-center justify-content-center">pt-5</div>
+        </div>
+        <div class="pr-8 bg-primary-100 w-12rem m-3 border-round">
+          <div class="border-round-left bg-primary font-bold p-3 flex align-items-center justify-content-center">pr-8</div>
+        </div>
+        <div class="pb-3 bg-primary-100 w-12rem m-3 border-round">
+          <div class="border-round-top bg-primary font-bold p-3 flex align-items-center justify-content-center">pb-3</div>
+        </div>
+        <div class="pl-6 bg-primary-100 w-12rem m-3 border-round">
+          <div class="border-round-right bg-primary font-bold p-3 flex align-items-center justify-content-center">pl-6</div>
+        </div>
+      </div>
+      <div class="p-grid">
+        <div class="p-col-12 p-sm-12 p-md-12 p-lg-2 p-xl-2">
+          <span class="p-float-label">
+            <input id="name" type="text" pInputText required />
+            <label for="name">Имя</label>
+          </span>
+        </div>
+        <div class="p-col-12 p-sm-12 p-md-12 p-lg-2 p-xl-2">
+          <span class="p-float-label">
+            <input id="surname" type="text" pInputText required />
+            <label for="surname">Фамилия</label>
+          </span>
+        </div>
+
+      </div>
+
+      <button pButton type="button" label="Отправить"></button>
+    </form>
+</p-dialog>
+
+<div>
+  <p-table *ngIf="organizations" [value]="organizations" [(selection)]="selectedOrganization">
+    <ng-template pTemplate="header">
+      <tr>
+        <th></th>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Координаты (X, Y)</th>
+        <th>Дата создания</th>
+        <th>Годовой оборот</th>
+        <th>Тип</th>
+        <th>Адрес</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-organization>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="organization" name="organization"></p-tableCheckbox>
+        </td>
+        <td>{{ organization.id }}</td>
+        <td>{{ organization.name }}</td>
+        <td>{{ organization.coordinateX }}, {{ organization.coordinateY }}</td>
+        <td>{{ organization.creationDate }}</td>
+        <td>{{ organization.annualTurnover }}</td>
+        <td>{{ OrganizationType[organization.type] }}</td>
+        <td>{{ organization.officialAddress }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
