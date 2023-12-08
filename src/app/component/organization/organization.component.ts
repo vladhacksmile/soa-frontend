@@ -34,6 +34,7 @@ export class OrganizationComponent implements OnInit {
   selectedOrganization: Organization | null = null; // выбранная организация
   pageSize!: number;
   visibleCreate!: boolean;
+  visibleEdit!: boolean;
   constructor(
     private formBuilder: FormBuilder,
     private organizationService: OrganizationService
@@ -119,6 +120,7 @@ export class OrganizationComponent implements OnInit {
     }
   }
 
+
   onRowSelect(event: any) {
     // Обработчик выбора строки
     if (this.selectedOrganization && this.selectedOrganization !== event.data) {
@@ -137,7 +139,17 @@ export class OrganizationComponent implements OnInit {
     this.visibleCreate = !this.visibleCreate;
   }
 
+
+  editName: string = "ffsjghjss";
+  showEdit(event: any) {
+    this.visibleEdit = !this.visibleEdit;
+    this.selectedOrganization = event;
+    console.log(this.selectedOrganization)
+  }
+
   protected readonly OrganizationType = OrganizationType;
   organizationType = ["PUBLIC", "GOVERNMENT", "TRUST", "PRIVATE_LIMITED_COMPANY", "OPEN_JOINT_STOCK_COMPANY"];
   selectedType: any;
+
+
 }
