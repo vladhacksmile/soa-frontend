@@ -1,7 +1,7 @@
 <div class="header">
   <p-button (click)="showCreate()" icon="pi pi-external-link" label="Добавить организацию"></p-button>
   <!--<p-button (click)="deleteAction()">Удалить</p-button>-->
-  <div>
+  <div class = header-buttons>
     <div class="p-input-icon-left">
       <i class="pi pi-search"></i>
       <input type="text" pInputText placeholder="Global Search" />
@@ -91,10 +91,12 @@
 
       </div>
 
-  <br>
-  <button pButton type="submit" label="Обновить"></button>
-      <p-button (click)="closeEdit($event)">Отмена</p-button>
-  <p-button (click)="deleteAction()">Удалить</p-button>
+      <br>
+      <div class="bottom-buttons">
+        <button pButton type="submit" label="Обновить"></button>
+        <p-button (click)="closeEdit($event)">Отмена</p-button>
+        <p-button (click)="deleteAction()" styleClass="p-button-danger">Удалить</p-button>
+      </div>
     </form>
 </p-dialog>
 
