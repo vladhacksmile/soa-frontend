@@ -1,6 +1,6 @@
-button {
-  margin-right: 8px;
-}
+/*button {*/
+/*  margin-right: 8px;*/
+/*}*/
 
 table {
   width: 100%;
@@ -39,5 +39,14 @@ th {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+}
+
+.header-buttons *:not(:last-child) {
+  margin-right: 10px;
+}
+
+.bottom-buttons {
+  display: flex;
+  justify-content: space-between;
 }
 

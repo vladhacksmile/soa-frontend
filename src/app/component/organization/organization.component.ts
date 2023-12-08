@@ -60,8 +60,8 @@ export class OrganizationComponent implements OnInit {
 
   onSubmit(): void{
     this.organizationService.createOrganization(new OrganizationRequest(this.form.value.name,
-        this.form.value.coordinateX, this.form.value.coordinateY, this.form.value.annualTurnover, this.form.value.type,
-        this.form.value.officialAddress)).subscribe(
+      this.form.value.coordinateX, this.form.value.coordinateY, this.form.value.annualTurnover, this.form.value.type,
+      this.form.value.officialAddress)).subscribe(
       data => {
         let description = data.description;
         let status = data.status;
@@ -130,24 +130,37 @@ export class OrganizationComponent implements OnInit {
   }
 
   deleteAction(): void {
-    if (this.selectedOrganization) {
-      this.organizationService.deleteOrganization(this.selectedOrganization.id).subscribe(
+    const result = window.confirm('Вы уверены, что хотите удалить организацию?');
+    if (result) {
+      if (this.selectedOrganization) {
+        this.organizationService.deleteOrganization(this.selectedOrganization.id).subscribe(
           data => {
             let description = data.description;
             let status = data.status;
             if (status != undefined && status == "OK") {
-              this.msg.add({severity:'success', summary: status, detail: description != undefined ? description : 'Организация удалена!'});
+              this.msg.add({
+                severity: 'success',
+                summary: status,
+                detail: description != undefined ? description : 'Организация удалена!'
+              });
               this.toggleEdit();
               this.ngOnInit();
             } else if (status != undefined) {
-              this.msg.add({severity:'error', summary: status, detail: description != undefined ? description : 'Неизвестная ошибка!'});
+              this.msg.add({
+                severity: 'error',
+                summary: status,
+                detail: description != undefined ? description : 'Неизвестная ошибка!'
+              });
             } else {
               this.msg.add({severity: 'error', summary: 'Сообщение', detail: 'Неизвестная ошибка data!'});
             }
           }, error => {
             this.dispatchError(error);
-        }
-      )
+          }
+        )
+      }
+    } else {
+
     }
   }
 
