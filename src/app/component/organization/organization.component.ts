@@ -100,8 +100,10 @@ export class OrganizationComponent implements OnInit {
   }
 
   deleteAction(): void {
-    if (this.selectedOrganization) {
-      this.organizationService.deleteOrganization(this.selectedOrganization.id).subscribe(
+    const result = window.confirm('Вы уверены, что хотите удалить организацию?');
+    if (result) {
+      if (this.selectedOrganization) {
+        this.organizationService.deleteOrganization(this.selectedOrganization.id).subscribe(
           data => {
             if (data.object != null) {
               this.selectedOrganization = null;
@@ -109,7 +111,10 @@ export class OrganizationComponent implements OnInit {
               this.getOrganizations();
             }
           },
-      )
+        )
+      }
+    } else {
+      this.toggleEdit();
     }
   }
 
