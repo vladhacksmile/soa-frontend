@@ -57,38 +57,6 @@ export class OrganizationComponent implements OnInit {
 
   ngOnInit(): void {
     this.getOrganizations();
-    // this.organizations = [
-    //   {
-    //     id: 1,
-    //     name: 'Company A',
-    //     coordinateX: 10,
-    //     coordinateY: 20,
-    //     creationDate: "дата",
-    //     annualTurnover: 1000000,
-    //     type: OrganizationType.PUBLIC,
-    //     officialAddress: '123 Main Street',
-    //   },
-    //   {
-    //     id: 2,
-    //     name: 'Company B',
-    //     coordinateX: 30,
-    //     coordinateY: 40,
-    //     creationDate: "дата",
-    //     annualTurnover: 2000000,
-    //     type: OrganizationType.GOVERNMENT,
-    //     officialAddress: '456 Oak Avenue',
-    //   },
-    //   {
-    //     id: 3,
-    //     name: 'Company C',
-    //     coordinateX: 50,
-    //     coordinateY: 60,
-    //     creationDate: "дата",
-    //     annualTurnover: 3000000,
-    //     type: OrganizationType.TRUST,
-    //     officialAddress: '789 Pine Road',
-    //   },
-    // ];
   }
 
   getOrganizations(): void {
@@ -116,12 +84,28 @@ export class OrganizationComponent implements OnInit {
     );
   }
 
+  onUpdate(): void{
+    console.log(this.selectedOrganization?.id)
+    this.organizationService.updateOrganization(new OrganizationRequest(this.form.value.name,
+      this.form.value.coordinateX, this.form.value.coordinateY, this.form.value.annualTurnover, this.form.value.type,
+      this.form.value.officialAddress, this.selectedOrganization?.id)).subscribe(
+      data => {
+        this.ngOnInit();
+        this.toggleEdit();
+        // this.msg.add({severity:'success', summary: 'Настройки', detail: 'Настройки успешно обновлены!'});
+      }, error => {
+
+      }
+    );
+  }
+
   deleteAction(): void {
     if (this.selectedOrganization) {
       this.organizationService.deleteOrganization(this.selectedOrganization.id).subscribe(
           data => {
             if (data.object != null) {
               this.selectedOrganization = null;
+              this.toggleEdit();
               this.getOrganizations();
             }
           },
@@ -156,7 +140,7 @@ export class OrganizationComponent implements OnInit {
   editOrganizationType: string | undefined;
   editOfficialAddress: string | undefined = ""
   showEdit(event: any) {
-    this.visibleEdit = !this.visibleEdit;
+    this.toggleEdit();
     this.selectedOrganization = event;
     this.editName = this.selectedOrganization?.name
     this.editCoordinateX = this.selectedOrganization?.coordinateX
@@ -167,10 +151,16 @@ export class OrganizationComponent implements OnInit {
     console.log(this.selectedOrganization)
   }
 
+  toggleEdit() {
+    this.visibleEdit = !this.visibleEdit;
+  }
+
+  closeEdit(event: any) {
+    this.toggleEdit();
+  }
+
   loadLazyData(event: LazyLoadEvent) {
     if (event != undefined && event.rows != undefined && event.first != undefined) {
-      console.log(event.first)
-      console.log(event.rows)
       this.organizationService.getOrganizations(event.first / event.rows + 1, event.rows).subscribe(
         data => {
           this.loading = false;

@@ -50,7 +50,7 @@ export class OrganizationService {
   }
 
   public updateOrganization(organizationRequest: OrganizationRequest) {
-    return this.http.put<any>(this.organizationUrl, organizationRequest, httpOptions);
+    return this.http.put<Result<Organization>>(this.organizationUrl, organizationRequest, httpOptions);
   }
 
   public countLowerAnnualTurnover(annualTurnover: number){

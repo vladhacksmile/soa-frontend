@@ -11,8 +11,6 @@
     <p-button (click)="uniqueLowerAnnualTurnover()">Уникальный оборот</p-button>
   </div>
 </div>
-<p-button (click)="showCreate()" icon="pi pi-external-link" label="Добавить организацию"></p-button>
-<p-button (click)="deleteAction()">Удалить</p-button>
 <p-dialog header="Добавление организации" [(visible)]="visibleCreate" [modal]="true" [draggable]="true" [resizable]="false">
   <form name="form" [formGroup]="form" (submit)="onSubmit()" #f="ngForm">
 
@@ -56,28 +54,28 @@
 </p-dialog>
 
 <p-dialog header="Редактирование организации" [(visible)]="visibleEdit" [modal]="true" [draggable]="true" [resizable]="false">
-    <form name="form" [formGroup]="form" (submit)="onSubmit()" #f="ngForm">
+    <form name="form" [formGroup]="form" (submit)="onUpdate()" #f="ngForm">
       <div class="p-grid">
 
           <span class="p-float-label organization-input-form">
-            <input id="name" type="text" pInputText required [(ngModel)]="editName" [ngModelOptions]="{standalone: true}" value={{editName}}/>
+            <input id="name" type="text" pInputText required [(ngModel)]="editName" value={{editName}} formControlName="name"/>
             <label for="name">Название организации</label>
           </span>
 
         <p>Координаты</p>
         <span class="p-float-label organization-input-form">
-          <input id="coordinate_x" type="number" pInputText required [(ngModel)]="editCoordinateX" [ngModelOptions]="{standalone: true}" value={{editCoordinateX}}/>
+          <input id="coordinate_x" type="number" pInputText required [(ngModel)]="editCoordinateX" value={{editCoordinateX}} formControlName="coordinateX"/>
           <label for="coordinate_x">X координаты</label>
         </span>
 
         <span class="p-float-label organization-input-form">
-          <input id="coordinate_y" type="number" pInputText required [(ngModel)]="editCoordinateY" [ngModelOptions]="{standalone: true}" value={{editCoordinateY}}/>
+          <input id="coordinate_y" type="number" pInputText required [(ngModel)]="editCoordinateY" value={{editCoordinateY}} formControlName="coordinateY"/>
           <label for="coordinate_y">Y координаты</label>
         </span>
 
         <p>Юридическая информация</p>
         <span class="p-float-label organization-input-form">
-          <input id="annualTurnover" type="number" pInputText required [(ngModel)]="editAnnualTurnover" [ngModelOptions]="{standalone: true}" value={{editAnnualTurnover}}/>
+          <input id="annualTurnover" type="number" pInputText required [(ngModel)]="editAnnualTurnover" value={{editAnnualTurnover}} formControlName="annualTurnover"/>
           <label for="annualTurnover">Годовой оборот</label>
         </span>
 
@@ -86,7 +84,7 @@
         </div>
 
         <span class="p-float-label organization-input-form">
-          <input id="officialAddress" type="text" pInputText required [(ngModel)]="editOfficialAddress" [ngModelOptions]="{standalone: true}" value={{editOfficialAddress}}/>
+          <input id="officialAddress" type="text" pInputText required [(ngModel)]="editOfficialAddress" value={{editOfficialAddress}} formControlName="officialAddress"/>
           <label for="officialAddress">Адрес</label>
         </span>
 
@@ -94,7 +92,8 @@
       </div>
 
   <br>
-  <button pButton type="button" label="Отправить"></button>
+  <button pButton type="submit" label="Обновить"></button>
+      <p-button (click)="closeEdit($event)">Отмена</p-button>
   <p-button (click)="deleteAction()">Удалить</p-button>
     </form>
 </p-dialog>
