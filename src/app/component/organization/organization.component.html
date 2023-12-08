@@ -5,24 +5,24 @@
       <div class="p-grid">
 
         <span class="p-float-label organization-input-form">
-          <input id="name" type="text" pInputText required />
+          <input id="name" type="text" formControlName="name" pInputText required />
           <label for="name">Название организации</label>
         </span>
 
         <p>Координаты</p>
         <span class="p-float-label organization-input-form">
-          <input id="coordinate_x" type="number" pInputText required />
+          <input id="coordinate_x" type="number" formControlName="coordinateX" pInputText required />
           <label for="coordinate_x">X координаты</label>
         </span>
 
         <span class="p-float-label organization-input-form">
-          <input id="coordinate_y" type="number" pInputText required />
+          <input id="coordinate_y" type="number" formControlName="coordinateY" pInputText required />
           <label for="coordinate_y">Y координаты</label>
         </span>
 
         <p>Юридическая информация</p>
         <span class="p-float-label organization-input-form">
-          <input id="annualTurnover" type="number" pInputText required />
+          <input id="annualTurnover" type="number" formControlName="annualTurnover" pInputText required />
           <label for="annualTurnover">Годовой оборот</label>
         </span>
 
@@ -31,62 +31,62 @@
         </div>
 
         <span class="p-float-label organization-input-form">
-          <input id="officialAddress" type="text" pInputText required />
+          <input id="officialAddress" type="text" formControlName="officialAddress" pInputText required />
           <label for="officialAddress">Адрес</label>
         </span>
       </div>
 
       <br>
-      <button pButton type="button" label="Отправить"></button>
+      <button pButton type="submit" label="Добавить"></button>
     </form>
 </p-dialog>
 
 <p-dialog header="Редактирование организации" [(visible)]="visibleEdit" [modal]="true" [draggable]="true" [resizable]="false">
-  <form name="form" [formGroup]="form" (submit)="onSubmit()" #f="ngForm">
-    <div class="p-grid">
+<!--  <form name="form" [formGroup]="form" (submit)="onSubmit()" #f="ngForm">-->
+<!--    <div class="p-grid">-->
 
-        <span class="p-float-label organization-input-form">
-          <input id="name" type="text" pInputText required [(ngModel)]="editName" [ngModelOptions]="{standalone: true}" value={{editName}}/>
-          <label for="name">Название организации</label>
-        </span>
+<!--        <span class="p-float-label organization-input-form">-->
+<!--          <input id="name" type="text" pInputText required [(ngModel)]="editName" [ngModelOptions]="{standalone: true}" value={{editName}}/>-->
+<!--          <label for="name">Название организации</label>-->
+<!--        </span>-->
 
-      <p>Координаты</p>
-      <span class="p-float-label organization-input-form">
-          <input id="coordinate_x" type="number" pInputText required />
-          <label for="coordinate_x">X координаты</label>
-        </span>
+<!--      <p>Координаты</p>-->
+<!--      <span class="p-float-label organization-input-form">-->
+<!--          <input id="coordinate_x" type="number" pInputText required />-->
+<!--          <label for="coordinate_x">X координаты</label>-->
+<!--        </span>-->
 
-      <span class="p-float-label organization-input-form">
-          <input id="coordinate_y" type="number" pInputText required />
-          <label for="coordinate_y">Y координаты</label>
-        </span>
+<!--      <span class="p-float-label organization-input-form">-->
+<!--          <input id="coordinate_y" type="number" pInputText required />-->
+<!--          <label for="coordinate_y">Y координаты</label>-->
+<!--        </span>-->
 
-      <p>Юридическая информация</p>
-      <span class="p-float-label organization-input-form">
-          <input id="annualTurnover" type="number" pInputText required />
-          <label for="annualTurnover">Годовой оборот</label>
-        </span>
+<!--      <p>Юридическая информация</p>-->
+<!--      <span class="p-float-label organization-input-form">-->
+<!--          <input id="annualTurnover" type="number" pInputText required />-->
+<!--          <label for="annualTurnover">Годовой оборот</label>-->
+<!--        </span>-->
 
-      <div class="organization-input-form">
-        <p-dropdown [options]="organizationType" [(ngModel)]="selectedType" [showClear]="true" placeholder="Тип организации"></p-dropdown>
-      </div>
+<!--      <div class="organization-input-form">-->
+<!--        <p-dropdown [options]="organizationType" [(ngModel)]="selectedType" [showClear]="true" placeholder="Тип организации"></p-dropdown>-->
+<!--      </div>-->
 
-      <span class="p-float-label organization-input-form">
-          <input id="officialAddress" type="text" pInputText required />
-          <label for="officialAddress">Адрес</label>
-        </span>
+<!--      <span class="p-float-label organization-input-form">-->
+<!--          <input id="officialAddress" type="text" pInputText required />-->
+<!--          <label for="officialAddress">Адрес</label>-->
+<!--        </span>-->
 
 
-    </div>
+<!--    </div>-->
 
     <br>
     <button pButton type="button" label="Отправить"></button>
     <p-button (click)="deleteAction()">Удалить</p-button>
-  </form>
+<!--  </form>-->
 </p-dialog>
 
 <div>
-  <p-table *ngIf="organizations" [value]="organizations" [rows]="10" [paginator]="true" [(selection)]="selectedOrganization" [rowsPerPageOptions]="[10,25,50]">
+  <p-table *ngIf="organizations" [value]="organizations" [rows]="rows" [(first)]="first" [paginator]="true" [lazy]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading" (onLazyLoad)="loadLazyData($event)" [totalRecords]="totalRecords">
     <ng-template pTemplate="header">
       <tr>
         <th></th>

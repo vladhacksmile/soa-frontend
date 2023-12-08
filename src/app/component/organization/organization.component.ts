@@ -4,9 +4,10 @@ import {Organization, OrganizationType} from "../../model/organization";
 import {OrganizationService} from "../../service/organization.service";
 import {SearchResult} from "../../model/SearchResult";
 import {Result} from "../../model/result";
-import {single} from "rxjs";
+import {first, single} from "rxjs";
 import {OrganizationRequest} from "../../request/OrganizationRequest";
 import { DropdownModule } from 'primeng/dropdown';
+import {LazyLoadEvent} from "primeng/api";
 
 @Component({
   selector: 'app-organization',
@@ -27,6 +28,8 @@ export class OrganizationComponent implements OnInit {
     officialAddress: ""
   };
   info: any;
+  loading: boolean = false;
+  totalRecords: number = 0;
   isUsedCashbackModel!: boolean;
   isPercentageOnBalanceModel!: boolean;
   isEvenDistributionModel!: boolean;
@@ -35,6 +38,8 @@ export class OrganizationComponent implements OnInit {
   pageSize!: number;
   visibleCreate!: boolean;
   visibleEdit!: boolean;
+  first = 0;
+  rows = 10;
   constructor(
     private formBuilder: FormBuilder,
     private organizationService: OrganizationService
@@ -90,6 +95,10 @@ export class OrganizationComponent implements OnInit {
     this.organizationService.getOrganizations().subscribe(
         data => {
           this.organizations = data.object?.objects;
+          this.loading = false;
+          if (this.organizations != undefined) {
+            this.totalRecords = this.organizations.length;
+          }
         },
     )
   }
@@ -145,6 +154,22 @@ export class OrganizationComponent implements OnInit {
     this.visibleEdit = !this.visibleEdit;
     this.selectedOrganization = event;
     console.log(this.selectedOrganization)
+  }
+
+  loadLazyData(event: LazyLoadEvent) {
+    if (event != undefined && event.rows != undefined && event.first != undefined) {
+      console.log(event.first)
+      console.log(event.rows)
+      this.organizationService.getOrganizations(event.first / event.rows + 1, event.rows).subscribe(
+        data => {
+          this.loading = false;
+          this.organizations = data.object?.objects;
+          if (data.object != undefined) {
+              this.totalRecords = data.object.totalElements;
+          }
+        },
+      )
+    }
   }
 
   protected readonly OrganizationType = OrganizationType;

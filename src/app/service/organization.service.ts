@@ -29,13 +29,13 @@ export class OrganizationService {
       filterOperation !== undefined || filterField !== undefined || filterValue !== undefined;
 
     var queryString = [
-      pageNum !== null && pageNum !== undefined ? `pageNum=${encodeURIComponent(pageNum)}` : '',
-      pageSize !== null && pageSize !== undefined ? `pageSize=${encodeURIComponent(pageSize)}` : '',
-      sortType !== null && sortType !== undefined ? `sortType=${encodeURIComponent(sortType)}` : '',
-      sortColumn !== null && sortColumn !== undefined ? `sortColumn=${encodeURIComponent(sortColumn)}` : '',
-      filterOperation !== null && filterOperation !== undefined ? `filterOperation=${encodeURIComponent(filterOperation)}` : '',
-      filterField !== null && filterField !== undefined ? `filterField=${encodeURIComponent(filterField)}` : '',
-      filterValue !== null && filterValue !== undefined ? `filterValue=${encodeURIComponent(filterValue)}` : ''
+      pageNum !== null && pageNum !== undefined ? `page_num=${encodeURIComponent(pageNum)}` : '',
+      pageSize !== null && pageSize !== undefined ? `page_size=${encodeURIComponent(pageSize)}` : '',
+      sortType !== null && sortType !== undefined ? `sort_type=${encodeURIComponent(sortType)}` : '',
+      sortColumn !== null && sortColumn !== undefined ? `sort_column=${encodeURIComponent(sortColumn)}` : '',
+      filterOperation !== null && filterOperation !== undefined ? `filter_operation=${encodeURIComponent(filterOperation)}` : '',
+      filterField !== null && filterField !== undefined ? `filter_field=${encodeURIComponent(filterField)}` : '',
+      filterValue !== null && filterValue !== undefined ? `filter_value=${encodeURIComponent(filterValue)}` : ''
     ].filter(Boolean).join('&');
 
     return this.http.get<Result<SearchResult<Organization>>>(`${this.organizationUrl}${hasParams ? '?' + queryString : ''}`);
