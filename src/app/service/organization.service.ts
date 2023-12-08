@@ -15,11 +15,30 @@ const httpOptions = {
 export class OrganizationService {
   private organizationUrl = 'https://localhost:8080/organizations';
 
+
   constructor(private http: HttpClient) {}
 
-  public getOrganizations(pageNum?: number, pageSize?: number, sortType?: string, sortColumn?: string, filterOperation?: string,
-                          filterField?: string, filterValue?: string) {
-    return this.http.get<Result<SearchResult<Organization>>>(this.organizationUrl);
+  public getOrganizations(pageNum?: number | null | undefined,
+                          pageSize?: number | null | undefined,
+                          sortType?: string | null | undefined,
+                          sortColumn?: string | null | undefined,
+                          filterOperation?: string | null | undefined,
+                          filterField?: string | null | undefined,
+                          filterValue?: string | null | undefined) {
+    const hasParams = pageNum !== undefined || pageSize !== undefined || sortType !== undefined || sortColumn !== undefined ||
+      filterOperation !== undefined || filterField !== undefined || filterValue !== undefined;
+
+    var queryString = [
+      pageNum !== null && pageNum !== undefined ? `pageNum=${encodeURIComponent(pageNum)}` : '',
+      pageSize !== null && pageSize !== undefined ? `pageSize=${encodeURIComponent(pageSize)}` : '',
+      sortType !== null && sortType !== undefined ? `sortType=${encodeURIComponent(sortType)}` : '',
+      sortColumn !== null && sortColumn !== undefined ? `sortColumn=${encodeURIComponent(sortColumn)}` : '',
+      filterOperation !== null && filterOperation !== undefined ? `filterOperation=${encodeURIComponent(filterOperation)}` : '',
+      filterField !== null && filterField !== undefined ? `filterField=${encodeURIComponent(filterField)}` : '',
+      filterValue !== null && filterValue !== undefined ? `filterValue=${encodeURIComponent(filterValue)}` : ''
+    ].filter(Boolean).join('&');
+
+    return this.http.get<Result<SearchResult<Organization>>>(`${this.organizationUrl}${hasParams ? '?' + queryString : ''}`);
   }
 
   public deleteOrganization(id: number){
@@ -31,6 +50,14 @@ export class OrganizationService {
   }
 
   public updateOrganization(organizationRequest: OrganizationRequest) {
-    return this.http.post<any>(this.organizationUrl, organizationRequest, httpOptions);
+    return this.http.put<any>(this.organizationUrl, organizationRequest, httpOptions);
+  }
+
+  public countLowerAnnualTurnover(annualTurnover: number){
+    return this.http.post<Result<number>>(this.organizationUrl + "/operations/count-lower-annual-turnover?annual-turnover=" + annualTurnover, httpOptions);
+  }
+
+  public uniqueAnnualTurnovers(){
+    return this.http.post<Result<number[]>>(this.organizationUrl + "/operations/unique-annual-turnovers", httpOptions);
   }
 }

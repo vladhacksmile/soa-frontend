@@ -35,8 +35,6 @@
           <input id="officialAddress" type="text" pInputText required />
           <label for="officialAddress">Адрес</label>
         </span>
-
-
       </div>
 
       <br>
@@ -45,7 +43,7 @@
 </p-dialog>
 
 <div>
-  <p-table *ngIf="organizations" [value]="organizations" [(selection)]="selectedOrganization">
+  <p-table *ngIf="organizations" [value]="organizations" [rows]="10" [paginator]="true" [(selection)]="selectedOrganization" [rowsPerPageOptions]="[10,25,50]">
     <ng-template pTemplate="header">
       <tr>
         <th></th>
