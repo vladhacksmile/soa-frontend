@@ -42,7 +42,7 @@ export class OrganizationComponent implements OnInit {
       annualTurnover: 0,
       type: OrganizationType.PUBLIC,
       officialAddress: "",
-      annuaTurnoverLower: 0
+      annualTurnoverLower: 0
     })
   }
 
@@ -229,7 +229,7 @@ export class OrganizationComponent implements OnInit {
   selectedSortingField: any;
 
   countLowerAnnualTurnover() {
-    this.organizationService.countLowerAnnualTurnover(this.form.value.annuaTurnoverLower).subscribe(
+    this.organizationService.countLowerAnnualTurnover(this.form.value.annualTurnoverLower).subscribe(
       data => {
         let description = data.description;
         let status = data.status;
@@ -240,7 +240,7 @@ export class OrganizationComponent implements OnInit {
             this.countLowerAnnualTurnoverValue = result;
           }
           this.ngOnInit();
-          this.toggleCountLowerAnnualTurnover();
+          // this.toggleCountLowerAnnualTurnover();
         } else if (status != undefined) {
           this.msg.add({severity:'error', summary: status, detail: description != undefined ? description : 'Неизвестная ошибка!'});
         } else {

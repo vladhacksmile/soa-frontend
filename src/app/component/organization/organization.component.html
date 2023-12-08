@@ -9,10 +9,31 @@
       <input type="text" pInputText placeholder="Global Search" />
     </div>
     <p-button (click)="findSubstring()">Поиск</p-button>
-    <p-button (click)="countLowerAnnualTurnover()">Меньший оборот</p-button>
+    <p-button (click)="toggleCountLowerAnnualTurnover()">Меньший оборот</p-button>
     <p-button (click)="uniqueLowerAnnualTurnover()">Уникальный оборот</p-button>
   </div>
 </div>
+
+<p-dialog header="Меньший оборот" [(visible)]="visibleCountLowerAnnualTurnover" [modal]="true" [draggable]="true" [resizable]="false">
+  <form name="annualForm" [formGroup]="form" (submit)="countLowerAnnualTurnover()" #f="ngForm">
+    <div class="p-grid">
+
+        <span class="p-float-label organization-input-form">
+          <input id="annualTurnoverLower" type="number" formControlName="annualTurnoverLower" pInputText required />
+          <label for="name">Оборот меньше чем</label>
+        </span>
+
+      <button pButton type="submit" label="Рассчитать"></button>
+
+      <span class="p-float-label organization-input-form">
+          <input id="countLowerAnnualTurnoverValue" type="number" [(ngModel)]="countLowerAnnualTurnoverValue" value={{countLowerAnnualTurnoverValue}} pInputText required />
+          <label for="name">Результат</label>
+      </span>
+
+    </div>
+  </form>
+</p-dialog>
+
 <p-dialog header="Добавление организации" [(visible)]="visibleCreate" [modal]="true" [draggable]="true" [resizable]="false">
   <form name="form" [formGroup]="form" (submit)="onSubmit()" #f="ngForm">
 
