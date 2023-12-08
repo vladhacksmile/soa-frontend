@@ -1,6 +1,18 @@
-<p-button (click)="showCreate()" icon="pi pi-external-link" label="Добавить организацию"></p-button>
-<p-button (click)="deleteAction()">Удалить</p-button>
+<div class="header">
+  <p-button (click)="showCreate()" icon="pi pi-external-link" label="Добавить организацию"></p-button>
+  <!--<p-button (click)="deleteAction()">Удалить</p-button>-->
+  <div>
+    <div class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input type="text" pInputText placeholder="Global Search" />
+    </div>
+    <p-button (click)="findSubstring()">Поиск</p-button>
+    <p-button (click)="countLowerAnnualTurnover()">Меньший оборот</p-button>
+    <p-button (click)="uniqueLowerAnnualTurnover()">Уникальный оборот</p-button>
+  </div>
+</div>
 <p-dialog header="Добавление организации" [(visible)]="visibleCreate" [modal]="true" [draggable]="true" [resizable]="false">
+
     <form name="form" [formGroup]="form" (submit)="onSubmit()" #f="ngForm">
       <div class="p-grid">
 
@@ -52,27 +64,27 @@
 
       <p>Координаты</p>
       <span class="p-float-label organization-input-form">
-          <input id="coordinate_x" type="number" pInputText required />
+          <input id="coordinate_x" type="number" pInputText required [(ngModel)]="editCoordinateX" [ngModelOptions]="{standalone: true}" value={{editCoordinateX}}/>
           <label for="coordinate_x">X координаты</label>
         </span>
 
       <span class="p-float-label organization-input-form">
-          <input id="coordinate_y" type="number" pInputText required />
+          <input id="coordinate_y" type="number" pInputText required [(ngModel)]="editCoordinateY" [ngModelOptions]="{standalone: true}" value={{editCoordinateY}}/>
           <label for="coordinate_y">Y координаты</label>
         </span>
 
       <p>Юридическая информация</p>
       <span class="p-float-label organization-input-form">
-          <input id="annualTurnover" type="number" pInputText required />
+          <input id="annualTurnover" type="number" pInputText required [(ngModel)]="editAnnualTurnover" [ngModelOptions]="{standalone: true}" value={{editAnnualTurnover}}/>
           <label for="annualTurnover">Годовой оборот</label>
         </span>
 
       <div class="organization-input-form">
-        <p-dropdown [options]="organizationType" [(ngModel)]="selectedType" [showClear]="true" placeholder="Тип организации"></p-dropdown>
+        <p-dropdown [options]="organizationType" [(ngModel)]="editOrganizationType" [showClear]="true" placeholder="Тип организации"></p-dropdown>
       </div>
 
       <span class="p-float-label organization-input-form">
-          <input id="officialAddress" type="text" pInputText required />
+          <input id="officialAddress" type="text" pInputText required [(ngModel)]="editOfficialAddress" [ngModelOptions]="{standalone: true}" value={{editOfficialAddress}}/>
           <label for="officialAddress">Адрес</label>
         </span>
 
@@ -81,7 +93,7 @@
 
     <br>
     <button pButton type="button" label="Отправить"></button>
-    <p-button (click)="deleteAction()">Удалить</p-button>
+    <p-button (click)="deleteAction()" styleClass="p-button-danger">Удалить</p-button>
   </form>
 </p-dialog>
 
@@ -102,7 +114,7 @@
     <ng-template pTemplate="body" let-organization>
       <tr>
         <td>
-          <p-button (click)="showEdit(organization)">Изменить</p-button>
+          <p-button (click)="showEdit(organization)" icon="pi pi-pencil" styleClass="p-button-success"></p-button>
         </td>
         <td>{{ organization.id }}</td>
         <td>{{ organization.name }}</td>

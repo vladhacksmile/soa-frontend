@@ -35,3 +35,9 @@ th {
   margin-top: 25px;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
