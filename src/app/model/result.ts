@@ -1,12 +1,12 @@
 export class Result<T> {
-    public status: Status;
+    public status: string;
     public description!: string;
     public object: T | undefined;
 
-    constructor(status: Status);
-    constructor(status: Status, object: T);
+    constructor(status: string);
+    constructor(status: string, object: T);
 
-    constructor(status: Status, object?: T) {
+    constructor(status: string, object?: T) {
         this.status = status;
         this.object = object;
     }

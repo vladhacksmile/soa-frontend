@@ -2,17 +2,15 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Organization, OrganizationType} from "../../model/organization";
 import {OrganizationService} from "../../service/organization.service";
-import {SearchResult} from "../../model/SearchResult";
-import {Result} from "../../model/result";
-import {first, single} from "rxjs";
+import {Result, Status} from "../../model/result";
 import {OrganizationRequest} from "../../request/OrganizationRequest";
-import { DropdownModule } from 'primeng/dropdown';
-import {LazyLoadEvent} from "primeng/api";
+import {LazyLoadEvent, MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-organization',
   templateUrl: './organization.component.html',
-  styleUrls: ['./organization.component.css']
+  styleUrls: ['./organization.component.css'],
+  providers: [MessageService]
 })
 export class OrganizationComponent implements OnInit {
   form!: FormGroup;
@@ -42,7 +40,8 @@ export class OrganizationComponent implements OnInit {
   rows = 10;
   constructor(
     private formBuilder: FormBuilder,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private msg: MessageService
   ) {
     this.form = this.formBuilder.group({
       name: "",
@@ -59,29 +58,52 @@ export class OrganizationComponent implements OnInit {
     this.getOrganizations();
   }
 
-  getOrganizations(): void {
-    this.organizationService.getOrganizations().subscribe(
-        data => {
-          this.organizations = data.object?.objects;
-          this.loading = false;
-          if (this.organizations != undefined) {
-            this.totalRecords = this.organizations.length;
-          }
-        },
-    )
-  }
-
   onSubmit(): void{
     this.organizationService.createOrganization(new OrganizationRequest(this.form.value.name,
         this.form.value.coordinateX, this.form.value.coordinateY, this.form.value.annualTurnover, this.form.value.type,
         this.form.value.officialAddress)).subscribe(
       data => {
-        this.ngOnInit();
-        // this.msg.add({severity:'success', summary: 'Настройки', detail: 'Настройки успешно обновлены!'});
+        let description = data.description;
+        let status = data.status;
+        if (status != undefined && status == "OK") {
+          this.msg.add({severity:'success', summary: status, detail: description != undefined ? description : 'Организация добавлена!'});
+          this.ngOnInit();
+          this.toggleCreate();
+        } else if (status != undefined) {
+          this.msg.add({severity:'error', summary: status, detail: description != undefined ? description : 'Неизвестная ошибка!'});
+        } else {
+          this.msg.add({severity: 'error', summary: 'Сообщение', detail: 'Неизвестная ошибка data!'});
+        }
       }, error => {
-
+        this.dispatchError(error);
       }
     );
+  }
+
+  public dispatchError(error: any) {
+    if (error.error instanceof ErrorEvent) {
+      this.msg.add({severity: 'error', summary: 'Ошибка на стороне клиента!', detail: error.message});
+    } else {
+      if (this.isResult(error.error)) {
+        let result = error.error as Result<any>;
+        let description = result.description;
+        let status = result.status;
+        this.msg.add({
+          severity: 'error',
+          summary: status,
+          detail: description != undefined ? description : 'Неизвестная ошибка!'
+        });
+      } else {
+        this.msg.add({
+          severity: 'error',
+          summary: "Неизвестная ошибка!",
+          detail: 'Неизвестная ошибка!'
+        });
+      }
+    }
+  }
+  public isResult(obj: any): obj is Result<any> {
+    return obj && obj.status !== undefined;
   }
 
   onUpdate(): void{
@@ -90,11 +112,19 @@ export class OrganizationComponent implements OnInit {
       this.form.value.coordinateX, this.form.value.coordinateY, this.form.value.annualTurnover, this.form.value.type,
       this.form.value.officialAddress, this.selectedOrganization?.id)).subscribe(
       data => {
+        let description = data.description;
+        let status = data.status;
+        if (status != undefined && status == "OK") {
+          this.msg.add({severity:'success', summary: status, detail: description != undefined ? description : 'Организация обновлена!'});
+        } else if (status != undefined) {
+          this.msg.add({severity:'error', summary: status, detail: description != undefined ? description : 'Неизвестная ошибка!'});
+        } else {
+          this.msg.add({severity: 'error', summary: 'Сообщение', detail: 'Неизвестная ошибка data!'});
+        }
         this.ngOnInit();
         this.toggleEdit();
-        // this.msg.add({severity:'success', summary: 'Настройки', detail: 'Настройки успешно обновлены!'});
       }, error => {
-
+        this.dispatchError(error);
       }
     );
   }
@@ -103,35 +133,27 @@ export class OrganizationComponent implements OnInit {
     if (this.selectedOrganization) {
       this.organizationService.deleteOrganization(this.selectedOrganization.id).subscribe(
           data => {
-            if (data.object != null) {
-              this.selectedOrganization = null;
+            let description = data.description;
+            let status = data.status;
+            if (status != undefined && status == "OK") {
+              this.msg.add({severity:'success', summary: status, detail: description != undefined ? description : 'Организация удалена!'});
               this.toggleEdit();
-              this.getOrganizations();
+              this.ngOnInit();
+            } else if (status != undefined) {
+              this.msg.add({severity:'error', summary: status, detail: description != undefined ? description : 'Неизвестная ошибка!'});
+            } else {
+              this.msg.add({severity: 'error', summary: 'Сообщение', detail: 'Неизвестная ошибка data!'});
             }
-          },
+          }, error => {
+            this.dispatchError(error);
+        }
       )
     }
-  }
-
-
-  onRowSelect(event: any) {
-    // Обработчик выбора строки
-    if (this.selectedOrganization && this.selectedOrganization !== event.data) {
-      // Если уже есть выбранная организация и выбрана другая, снимите галочку с предыдущей
-      this.selectedOrganization = null;
-    }
-    this.selectedOrganization = event.data;
-    console.log('Row selected', this.selectedOrganization);
-  }
-
-  onRowUnselect(event: any) {
-    this.selectedOrganization = null;
   }
 
   showCreate() {
     this.visibleCreate = !this.visibleCreate;
   }
-
 
   editName: string | undefined = "";
   editCoordinateX: number | undefined = 0;
@@ -139,6 +161,7 @@ export class OrganizationComponent implements OnInit {
   editAnnualTurnover: number | undefined = 0;
   editOrganizationType: string | undefined;
   editOfficialAddress: string | undefined = ""
+
   showEdit(event: any) {
     this.toggleEdit();
     this.selectedOrganization = event;
@@ -155,22 +178,37 @@ export class OrganizationComponent implements OnInit {
     this.visibleEdit = !this.visibleEdit;
   }
 
+  toggleCreate() {
+    this.visibleCreate = !this.visibleCreate;
+  }
+
+  closeCreate(event: any) {
+    this.toggleEdit();
+  }
+
   closeEdit(event: any) {
     this.toggleEdit();
   }
 
   loadLazyData(event: LazyLoadEvent) {
     if (event != undefined && event.rows != undefined && event.first != undefined) {
-      this.organizationService.getOrganizations(event.first / event.rows + 1, event.rows).subscribe(
-        data => {
-          this.loading = false;
-          this.organizations = data.object?.objects;
-          if (data.object != undefined) {
-              this.totalRecords = data.object.totalElements;
-          }
-        },
-      )
+      this.first = event.first;
+      this.rows = event.rows;
     }
+
+    this.getOrganizations();
+  }
+
+  public getOrganizations() {
+    this.organizationService.getOrganizations(this.first / this.rows + 1, this.rows).subscribe(
+      data => {
+        this.loading = false;
+        this.organizations = data.object?.objects;
+        if (data.object != undefined) {
+          this.totalRecords = data.object.totalElements;
+        }
+      },
+    )
   }
 
   protected readonly OrganizationType = OrganizationType;
