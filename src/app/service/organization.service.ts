@@ -13,7 +13,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class OrganizationService {
-  private organizationUrl = 'http://localhost:8080/organizations';
+  private organizationUrl = 'https://localhost:8080/organizations';
 
   constructor(private http: HttpClient) {}
 

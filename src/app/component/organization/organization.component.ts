@@ -6,6 +6,7 @@ import {SearchResult} from "../../model/SearchResult";
 import {Result} from "../../model/result";
 import {single} from "rxjs";
 import {OrganizationRequest} from "../../request/OrganizationRequest";
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-organization',
@@ -137,4 +138,6 @@ export class OrganizationComponent implements OnInit {
   }
 
   protected readonly OrganizationType = OrganizationType;
+  organizationType = ["PUBLIC", "GOVERNMENT", "TRUST", "PRIVATE_LIMITED_COMPANY", "OPEN_JOINT_STOCK_COMPANY"];
+  selectedType: any;
 }
