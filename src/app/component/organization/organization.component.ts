@@ -149,10 +149,21 @@ export class OrganizationComponent implements OnInit {
   }
 
 
-  editName: string = "ffsjghjss";
+  editName: string | undefined = "";
+  editCoordinateX: number | undefined = 0;
+  editCoordinateY: number | undefined = 0;
+  editAnnualTurnover: number | undefined = 0;
+  editOrganizationType: string | undefined;
+  editOfficialAddress: string | undefined = ""
   showEdit(event: any) {
     this.visibleEdit = !this.visibleEdit;
     this.selectedOrganization = event;
+    this.editName = this.selectedOrganization?.name
+    this.editCoordinateX = this.selectedOrganization?.coordinateX
+    this.editCoordinateY = this.selectedOrganization?.coordinateY
+    this.editAnnualTurnover = this.selectedOrganization?.annualTurnover
+    // this.editOrganizationType = this.selectedOrganization?.type.toString()
+    this.editOfficialAddress = this.selectedOrganization?.officialAddress
     console.log(this.selectedOrganization)
   }
 
@@ -177,4 +188,15 @@ export class OrganizationComponent implements OnInit {
   selectedType: any;
 
 
+  countLowerAnnualTurnover() {
+
+  }
+
+  findSubstring() {
+
+  }
+
+  uniqueLowerAnnualTurnover() {
+
+  }
 }
