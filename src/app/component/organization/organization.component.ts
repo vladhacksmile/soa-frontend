@@ -49,6 +49,8 @@ export class OrganizationComponent implements OnInit {
   }
 
   onSubmit(): void{
+    console.log(this.form.value.type)
+    console.log(this.selectedType)
     this.organizationService.createOrganization(new OrganizationRequest(this.form.value.name,
       this.form.value.coordinateX, this.form.value.coordinateY, this.form.value.annualTurnover, this.form.value.type,
       this.form.value.officialAddress)).subscribe(
