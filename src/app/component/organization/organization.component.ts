@@ -52,6 +52,10 @@ export class OrganizationComponent implements OnInit {
     console.log(this.selectedType)
     console.log(this.editOrganizationType)
     console.log(this.form.value.type)
+    if (this.form.value.coordinateX < -963) {
+      this.msg.add({severity:'error', summary: "Validation error", detail: 'X должен быть больше -962'});
+      return
+    }
     this.organizationService.createOrganization(new OrganizationRequest(this.form.value.name,
       this.form.value.coordinateX, this.form.value.coordinateY, this.form.value.annualTurnover, this.selectedType,
       this.form.value.officialAddress)).subscribe(
