@@ -171,17 +171,17 @@
 
       <p>Личные данные</p>
       <span class="p-float-label employee-input-form">
-          <input id="firstName" type="number" formControlName="firstName" pInputText required [(ngModel)]="editEmployeeFirstName" value={{editEmployeeFirstName}} />
+          <input id="firstName" type="text" formControlName="firstName" pInputText required [(ngModel)]="editEmployeeFirstName" value={{editEmployeeFirstName}} />
           <label for="firstName">Имя</label>
       </span>
 
       <span class="p-float-label employee-input-form">
-          <input id="lastName" type="number" formControlName="lastName" pInputText required [(ngModel)]="editEmployeeLastName" value={{editEmployeeLastName}}/>
+          <input id="lastName" type="text" formControlName="lastName" pInputText required [(ngModel)]="editEmployeeLastName" value={{editEmployeeLastName}}/>
           <label for="lastName">Фамилия</label>
       </span>
 
       <span class="p-float-label employee-input-form">
-          <input id="email" type="text" formControlName="email" pInputText required [(ngModel)]="editEmployeeLastName" value={{editEmployeeLastName}}/>
+          <input id="email" type="text" formControlName="email" pInputText required [(ngModel)]="editEmployeeEmail" value={{editEmployeeEmail}}/>
           <label for="email">Email</label>
         </span>
     </div>
