@@ -164,7 +164,7 @@ export class OrganizationComponent implements OnInit {
   editCoordinateX: number | undefined = 0;
   editCoordinateY: number | undefined = 0;
   editAnnualTurnover: number | undefined = 0;
-  editOrganizationType: string | undefined;
+  editOrganizationType: string | undefined = "TRUST";
   editOfficialAddress: string | undefined = ""
 
   showEdit(event: any) {
@@ -174,7 +174,9 @@ export class OrganizationComponent implements OnInit {
     this.editCoordinateX = this.selectedOrganization?.coordinateX
     this.editCoordinateY = this.selectedOrganization?.coordinateY
     this.editAnnualTurnover = this.selectedOrganization?.annualTurnover
-    // this.editOrganizationType = this.selectedOrganization?.type.toString()
+    console.log(this.selectedOrganization?.type + " " + typeof this.selectedOrganization?.type)
+    this.editOrganizationType = String(this.selectedOrganization?.type)
+    console.log("Изменённый " + this.editOrganizationType + " " + typeof this.editOrganizationType)
     this.editOfficialAddress = this.selectedOrganization?.officialAddress
     console.log(this.selectedOrganization)
   }
@@ -221,7 +223,14 @@ export class OrganizationComponent implements OnInit {
   }
 
   protected readonly OrganizationType = OrganizationType;
-  organizationType = ["PUBLIC", "GOVERNMENT", "TRUST", "PRIVATE_LIMITED_COMPANY", "OPEN_JOINT_STOCK_COMPANY"];
+  // organizationType = ["PUBLIC", "GOVERNMENT", "TRUST", "PRIVATE_LIMITED_COMPANY", "OPEN_JOINT_STOCK_COMPANY"];
+  organizationType = [
+    {label: "Публичный", value: "PUBLIC"},
+    {label: "Государственный", value: "GOVERNMENT"},
+    {label: "Доверенный", value: "TRUST"},
+    {label: "Приватный", value: "PRIVATE_LIMITED_COMPANY"},
+    {label: "ОАО", value: "OPEN_JOINT_STOCK_COMPANY"},
+  ]
   selectedType: any;
   sortingType = ["По-возрастанию", "По-убыванию"];
   sortingField = ["ID", "Имя", "X", "Y", "Дата создания", "Годовой оборот", "Тип", "Адрес"];

@@ -23,10 +23,10 @@
           <label for="name">Оборот меньше чем</label>
         </span>
 
-      <button pButton type="submit" label="Рассчитать"></button>
+      <button class="organization-input-form" pButton type="submit" label="Рассчитать"></button>
 
       <span class="p-float-label organization-input-form">
-          <input id="countLowerAnnualTurnoverValue" type="number" [(ngModel)]="countLowerAnnualTurnoverValue" value={{countLowerAnnualTurnoverValue}} pInputText required />
+          <input readonly id="countLowerAnnualTurnoverValue" type="number" [(ngModel)]="countLowerAnnualTurnoverValue" value={{countLowerAnnualTurnoverValue}} pInputText required />
           <label for="name">Результат</label>
       </span>
 
@@ -103,7 +103,7 @@
         </span>
 
         <div class="organization-input-form">
-          <p-dropdown [options]="organizationType" [(ngModel)]="editOrganizationType" [showClear]="false" placeholder="Тип организации"></p-dropdown>
+          <p-dropdown [options]="organizationType" [(ngModel)]="editOrganizationType" optionValue="value" [ngModelOptions]="{standalone: true}" [showClear]="false" placeholder="Тип организации"></p-dropdown>
         </div>
 
         <span class="p-float-label organization-input-form">
