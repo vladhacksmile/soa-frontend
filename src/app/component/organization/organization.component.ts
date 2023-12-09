@@ -210,7 +210,7 @@ export class OrganizationComponent implements OnInit {
 
   public getOrganizations() {
     this.organizationService.getOrganizations(this.first / this.rows + 1, this.rows,
-      this.selectedSortingType.toString(), this.selectedSortingField.toString(), "greater_or_equal", "name", this.searchTerm).subscribe(
+      this.selectedSortingType.toString(), this.selectedSortingField.toString(), "like", "name", this.searchTerm).subscribe(
       data => {
         this.loading = false;
         let status = data.status;
