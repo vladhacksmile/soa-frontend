@@ -34,6 +34,20 @@
   </form>
 </p-dialog>
 
+<p-dialog header="Поглощение организации" [(visible)]="visibleAcquise" [modal]="true" [draggable]="true" [resizable]="false">
+  <form name="acquiseForm" [formGroup]="form" (submit)="onAcquise()" #f="ngForm">
+    <div class="p-grid">
+
+        <span class="p-float-label acquise-input-form">
+          <input id="acquiseOrganizationId" type="number" formControlName="acquiseOrganizationId" pInputText required />
+          <label for="acquiseOrganizationId">Организация для поглощения</label>
+        </span>
+
+      <button class="acquise-input-form" pButton type="submit" label="Поглотить"></button>
+    </div>
+  </form>
+</p-dialog>
+
 <p-dialog header="Добавление организации" [(visible)]="visibleCreate" [modal]="true" [draggable]="true" [resizable]="false">
   <form name="form" [formGroup]="form" (submit)="onCreate()" #f="ngForm">
 
@@ -116,6 +130,7 @@
       <div class="bottom-buttons">
         <button pButton type="submit" label="Обновить"></button>
         <p-button (click)="showHireEmployee()">Сотрудник</p-button>
+        <p-button (click)="showAcquise()">Сотрудник</p-button>
         <p-button (click)="deleteAction()" styleClass="p-button-danger">Удалить</p-button>
       </div>
     </form>

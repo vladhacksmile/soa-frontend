@@ -54,7 +54,7 @@ export class OrganizationService {
       pageSize !== null && pageSize !== undefined ? `page_size=${encodeURIComponent(pageSize)}` : '',
     ].filter(Boolean).join('&');
     const organizationUrl = "/organization/";
-    return this.http.get<Result<SearchResult<Employee>>>(`${this.employeeUrl + organizationUrl}${hasParams ? '?' + queryString : ''}`);
+    return this.http.get<Result<SearchResult<Employee>>>(`${this.employeeUrl + organizationUrl + organizationId}${hasParams ? '?' + queryString : ''}`);
   }
 
   public deleteOrganization(id: number){
@@ -83,6 +83,10 @@ export class OrganizationService {
 
   public countLowerAnnualTurnover(annualTurnover: number){
     return this.http.post<Result<number>>(this.organizationUrl + "/operations/count-lower-annual-turnover?annual-turnover=" + annualTurnover, httpOptions);
+  }
+
+  public acquiseOrganization(organizationId1: number, organizationId2: number){
+    return this.http.post<any>(this.orgManagerUrl + "/acquise/" + organizationId1 + "/" + organizationId2, httpOptions);
   }
 
   public uniqueAnnualTurnovers(){

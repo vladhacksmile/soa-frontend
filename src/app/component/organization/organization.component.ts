@@ -30,6 +30,7 @@ export class OrganizationComponent implements OnInit {
     visibleCreate!: boolean;
     visibleEdit!: boolean;
     visibleCreateEmployee!: boolean;
+    visibleAcquise!: boolean;
     visibleEditEmployee!: boolean;
     visibleCountLowerAnnualTurnover!: boolean;
     countLowerAnnualTurnoverValue: number = 0;
@@ -51,7 +52,8 @@ export class OrganizationComponent implements OnInit {
             annualTurnover: 0,
             type: "PUBLIC",
             officialAddress: "",
-            annualTurnoverLower: 0
+            annualTurnoverLower: 0,
+            acquiseOrganizationId: 0
         })
         this.employeeForm = this.formBuilder.group({
             id: 0,
@@ -179,7 +181,7 @@ export class OrganizationComponent implements OnInit {
                         this.msg.add({severity: 'error', summary: 'Сообщение', detail: 'Неизвестная ошибка data!'});
                     }
                     this.getEmployeesByOrganizationId();
-                    this.toggleEdit();
+                    this.toggleEditEmployee();
                 }, error => {
                     this.dispatchError(error);
                 }
@@ -199,7 +201,29 @@ export class OrganizationComponent implements OnInit {
                         detail: 'Сотрудник добавлен!'
                     });
                     this.getEmployeesByOrganizationId();
-                    this.toggleEdit();
+                    this.toggleCreateEmployee();
+                }, error => {
+                    this.msg.add({
+                        severity: 'error',
+                        summary: "Ошибка",
+                        detail: error.error.toString()
+                    });
+                }
+            );
+        }
+    }
+
+    onAcquise(): void {
+        if (this.selectedOrganization != undefined) {
+            this.organizationService.acquiseOrganization(this.form.value.acquiseOrganizationId, this.selectedOrganization.id).subscribe(
+                data => {
+                    this.msg.add({
+                        severity: 'success',
+                        summary: "OK",
+                        detail: 'Организация поглощена!'
+                    });
+                    this.afterAcquiseAction();
+                    this.showAcquise();
                 }, error => {
                     this.msg.add({
                         severity: 'error',
@@ -313,6 +337,16 @@ export class OrganizationComponent implements OnInit {
         this.employeeForm.value.lastName = '';
         this.employeeForm.value.email = '';
         this.employeeForm.value.organizationId = 0;
+    }
+
+    showAcquise() {
+        this.visibleAcquise = !this.visibleAcquise;
+        this.form.value.acquiseOrganizationId = 0;
+    }
+
+    afterAcquiseAction() {
+        this.getOrganizations();
+        this.getEmployeesByOrganizationId();
     }
 
     editName: string | undefined = "";
