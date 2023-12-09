@@ -79,10 +79,10 @@
     <form name="form" [formGroup]="form" (submit)="onUpdate()" #f="ngForm">
       <div class="p-grid">
 
-          <span class="p-float-label organization-input-form">
-            <input id="name" type="text" pInputText required [(ngModel)]="editName" value={{editName}} formControlName="name"/>
-            <label for="name">Название организации</label>
-          </span>
+        <span class="p-float-label organization-input-form">
+          <input id="name" type="text" pInputText required [(ngModel)]="editName" value={{editName}} formControlName="name"/>
+          <label for="name">Название организации</label>
+        </span>
 
         <p>Координаты</p>
         <span class="p-float-label organization-input-form">
@@ -115,10 +115,98 @@
       <br>
       <div class="bottom-buttons">
         <button pButton type="submit" label="Обновить"></button>
-        <p-button (click)="closeEdit($event)">Отмена</p-button>
+        <p-button (click)="showHireEmployee()">Сотрудник</p-button>
         <p-button (click)="deleteAction()" styleClass="p-button-danger">Удалить</p-button>
       </div>
     </form>
+
+  <p-table *ngIf="employees" [value]="employees" [rows]="rowsEmployee" [(first)]="firstEmployee" [paginator]="true" [lazy]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loadingEmployee" (onLazyLoad)="loadLazyDataEmployee($event)" [totalRecords]="totalRecordsEmployee">
+    <ng-template pTemplate="header">
+      <tr>
+        <th></th>
+        <th>ID</th>
+        <th>Имя пользователя</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Email</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-employee>
+      <tr>
+        <td>
+          <p-button (click)="showEditEmployee(employee)" icon="pi pi-pencil" styleClass="p-button-success"></p-button>
+        </td>
+        <td>{{ employee.id }}</td>
+        <td>{{ employee.userName }}</td>
+        <td>{{ employee.firstName }}</td>
+        <td>{{ employee.lastName }}</td>
+        <td>{{ employee.email }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>
+
+<p-dialog header="Редактирование сотрудника" [(visible)]="visibleEditEmployee" [modal]="true" [draggable]="true" [resizable]="false">
+  <form name="employeeForm" [formGroup]="employeeForm" (submit)="onUpdateEmployee()" #f="ngForm">
+    <div class="p-grid">
+      <span class="p-float-label employee-input-form">
+          <input id="userName" type="text" formControlName="userName" pInputText required [(ngModel)]="editEmployeeUserName" value={{editEmployeeUserName}}  />
+          <label for="userName">Имя пользователя</label>
+      </span>
+
+      <p>Личные данные</p>
+      <span class="p-float-label employee-input-form">
+          <input id="firstName" type="number" formControlName="firstName" pInputText required [(ngModel)]="editEmployeeFirstName" value={{editEmployeeFirstName}} />
+          <label for="firstName">Имя</label>
+      </span>
+
+      <span class="p-float-label employee-input-form">
+          <input id="lastName" type="number" formControlName="lastName" pInputText required [(ngModel)]="editEmployeeLastName" value={{editEmployeeLastName}}/>
+          <label for="lastName">Фамилия</label>
+      </span>
+
+      <span class="p-float-label employee-input-form">
+          <input id="email" type="text" formControlName="email" pInputText required [(ngModel)]="editEmployeeLastName" value={{editEmployeeLastName}}/>
+          <label for="email">Email</label>
+        </span>
+    </div>
+
+    <br>
+    <div class="bottom-buttons">
+      <button pButton type="submit" label="Обновить"></button>
+      <p-button (click)="deleteEmployeeAction()" styleClass="p-button-danger">Удалить</p-button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog header="Добавление сотрудника в организацию" [(visible)]="visibleCreateEmployee" [modal]="true" [draggable]="true" [resizable]="false">
+  <form name="employeeForm" [formGroup]="employeeForm" (submit)="onHire()" #f="ngForm">
+
+    <div class="p-grid">
+      <span class="p-float-label employee-input-form">
+        <input id="userName" type="text" formControlName="userName" pInputText required />
+        <label for="userName">Имя пользователя</label>
+      </span>
+
+      <p>Личные данные</p>
+      <span class="p-float-label employee-input-form">
+          <input id="firstName" type="text" formControlName="firstName" pInputText required />
+          <label for="firstName">Имя</label>
+      </span>
+
+      <span class="p-float-label employee-input-form">
+          <input id="lastName" type="text" formControlName="lastName" pInputText required />
+          <label for="lastName">Фамилия</label>
+      </span>
+
+      <span class="p-float-label employee-input-form">
+          <input id="email" type="text" formControlName="email" pInputText required />
+          <label for="email">Email</label>
+      </span>
+    </div>
+    <br>
+    <button pButton type="submit" label="Добавить"></button>
+  </form>
 </p-dialog>
 
 <div>
