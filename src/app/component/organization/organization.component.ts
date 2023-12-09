@@ -371,6 +371,7 @@ export class OrganizationComponent implements OnInit {
         this.editOrganizationType = this.selectedOrganization?.type.toString();
         this.form.value.type = this.editOrganizationType;
         this.editOfficialAddress = this.selectedOrganization?.officialAddress;
+        this.getEmployeesByOrganizationId();
     }
 
     showEditEmployee(event: any) {
@@ -456,7 +457,7 @@ export class OrganizationComponent implements OnInit {
 
     public getEmployeesByOrganizationId() {
         if (this.selectedOrganization != undefined) {
-            this.organizationService.getEmployeesByOrganizationId(this.first / this.rows + 1, this.rows, this.selectedOrganization.id).subscribe(
+            this.organizationService.getEmployeesByOrganizationId(this.firstEmployee / this.rowsEmployee + 1, this.rowsEmployee, this.selectedOrganization.id).subscribe(
                 data => {
                     this.loadingEmployee = false;
                     let status = data.status;
