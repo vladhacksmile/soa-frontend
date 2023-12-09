@@ -6,10 +6,10 @@ export class OrganizationRequest {
   coordinateX: number;
   coordinateY: number;
   annualTurnover: number;
-  type: OrganizationType;
+  type: string;
   officialAddress: string;
 
-  constructor(name: string, coordinateX: number, coordinateY: number, annualTurnover: number, type: OrganizationType, officialAddress: string, id?: number | undefined) {
+  constructor(name: string, coordinateX: number, coordinateY: number, annualTurnover: number, type: string, officialAddress: string, id?: number | undefined) {
     this.name = name;
     this.coordinateX = coordinateX;
     this.coordinateY = coordinateY;

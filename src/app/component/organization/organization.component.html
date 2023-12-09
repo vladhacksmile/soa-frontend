@@ -2,8 +2,8 @@
   <p-toast></p-toast>
   <p-button (click)="showCreate()" icon="pi pi-external-link" label="Добавить организацию"></p-button>
   <div class = header-buttons>
-    <p-dropdown [options]="sortingType" [(ngModel)]="selectedSortingType" [showClear]="true" placeholder="Тип сортировки" (onChange)="getOrganizations()"></p-dropdown>
-    <p-dropdown [options]="sortingField" [(ngModel)]="selectedSortingField" [showClear]="true" placeholder="Поле для сортировки" (onChange)="getOrganizations()"></p-dropdown>
+    <p-dropdown [options]="sortingType" [(ngModel)]="selectedSortingType" [showClear]="false" placeholder="Тип сортировки" (onChange)="getOrganizations()"></p-dropdown>
+    <p-dropdown [options]="sortingField" [(ngModel)]="selectedSortingField" [showClear]="false" placeholder="Поле для сортировки" (onChange)="getOrganizations()"></p-dropdown>
     <div class="p-input-icon-left">
       <i class="pi pi-search"></i>
       <input type="text" pInputText placeholder="Поиск по имени" [(ngModel)]="searchTerm" (keyup.enter)="findSubstring()"/>
@@ -35,7 +35,7 @@
 </p-dialog>
 
 <p-dialog header="Добавление организации" [(visible)]="visibleCreate" [modal]="true" [draggable]="true" [resizable]="false">
-  <form name="form" [formGroup]="form" (submit)="onSubmit()" #f="ngForm">
+  <form name="form" [formGroup]="form" (submit)="onCreate()" #f="ngForm">
 
     <div class="p-grid">
 
@@ -62,7 +62,7 @@
         </span>
 
       <div class="organization-input-form">
-        <p-dropdown [options]="organizationType" [(ngModel)]="selectedType" optionValue="value" [showClear]="true" placeholder="Тип организации"></p-dropdown>
+        <p-dropdown [options]="organizationType" [(ngModel)]="selectedType" [showClear]="false" placeholder="Тип организации" (onChange)="onCreationTypeChange($event)" formControlName="type"></p-dropdown>
       </div>
 
       <span class="p-float-label organization-input-form">
@@ -70,7 +70,6 @@
           <label for="officialAddress">Адрес</label>
         </span>
     </div>
-
     <br>
     <button pButton type="submit" label="Добавить"></button>
   </form>
@@ -103,14 +102,13 @@
         </span>
 
         <div class="organization-input-form">
-          <p-dropdown [options]="organizationType" [(ngModel)]="editOrganizationType" optionValue="value" [ngModelOptions]="{standalone: true}" [showClear]="false" placeholder="Тип организации"></p-dropdown>
+          <p-dropdown [options]="organizationType" [(ngModel)]="editOrganizationType" [showClear]="false" placeholder="Тип организации" formControlName="type"></p-dropdown>
         </div>
 
         <span class="p-float-label organization-input-form">
           <input id="officialAddress" type="text" pInputText required [(ngModel)]="editOfficialAddress" value={{editOfficialAddress}} formControlName="officialAddress"/>
           <label for="officialAddress">Адрес</label>
         </span>
-
 
       </div>
 
@@ -147,7 +145,7 @@
         <td>{{ organization.coordinateX }}, {{ organization.coordinateY }}</td>
         <td>{{ organization.creationDate }}</td>
         <td>{{ organization.annualTurnover }}</td>
-        <td>{{ OrganizationType[organization.type] }}</td>
+        <td>{{ organization.type }}</td>
         <td>{{ organization.officialAddress }}</td>
       </tr>
     </ng-template>
