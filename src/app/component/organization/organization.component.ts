@@ -345,8 +345,8 @@ export class OrganizationComponent implements OnInit {
     }
 
     afterAcquiseAction() {
-        this.getOrganizations();
         this.getEmployeesByOrganizationId();
+        this.getOrganizations();
     }
 
     editName: string | undefined = "";
