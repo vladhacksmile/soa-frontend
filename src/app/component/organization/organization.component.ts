@@ -17,9 +17,6 @@ export class OrganizationComponent implements OnInit {
   info: any;
   loading: boolean = false;
   totalRecords: number = 0;
-  isUsedCashbackModel!: boolean;
-  isPercentageOnBalanceModel!: boolean;
-  isEvenDistributionModel!: boolean;
   organizations!: Organization[] | undefined;
   selectedOrganization: Organization | null = null; // выбранная организация
   pageSize!: number;
@@ -29,6 +26,7 @@ export class OrganizationComponent implements OnInit {
   countLowerAnnualTurnoverValue: number = 0;
   first = 0;
   rows = 10;
+  searchTerm: string = '';
   constructor(
     private formBuilder: FormBuilder,
     private organizationService: OrganizationService,
@@ -209,24 +207,48 @@ export class OrganizationComponent implements OnInit {
   }
 
   public getOrganizations() {
-    this.organizationService.getOrganizations(this.first / this.rows + 1, this.rows).subscribe(
+    this.organizationService.getOrganizations(this.first / this.rows + 1, this.rows,
+      this.selectedSortingType.toString(), this.selectedSortingField.toString(), "greater_or_equal", "name", this.searchTerm).subscribe(
       data => {
         this.loading = false;
-        this.organizations = data.object?.objects;
-        if (data.object != undefined) {
-          this.totalRecords = data.object.totalElements;
+        let status = data.status;
+        if (status != undefined && status == "OK") {
+          if (data.object != undefined) {
+            this.organizations = data.object.objects;
+            this.totalRecords = data.object.totalElements;
+          } else {
+            this.organizations = undefined;
+            this.totalRecords = 0;
+          }
+        } else {
+          this.organizations = undefined;
+          this.totalRecords = 0;
         }
-      },
+      }, error => {
+        this.organizations = undefined;
+        this.totalRecords = 0;
+        this.dispatchError(error);
+      }
     )
   }
 
   protected readonly OrganizationType = OrganizationType;
   organizationType = ["PUBLIC", "GOVERNMENT", "TRUST", "PRIVATE_LIMITED_COMPANY", "OPEN_JOINT_STOCK_COMPANY"];
   selectedType: any;
-  sortingType = ["По-возрастанию", "По-убыванию"];
-  sortingField = ["ID", "Имя", "X", "Y", "Дата создания", "Годовой оборот", "Тип", "Адрес"];
-  selectedSortingType: any;
-  selectedSortingField: any;
+  sortingType = [{label: "По возрастанию", value: "asc"}, {label: "По убыванию", value: "desc"}];
+  sortingField = [
+    {label: "ID", value: "id"},
+    {label: "Имя", value: "name"},
+    {label: "Координата X", value: "coordinateX"},
+    {label: "Координата Y", value: "coordinateY"},
+    {label: "Дата создания", value: "creationDate"},
+    {label: "Годовой оборот", value: "annualTurnover"},
+    {label: "Тип", value: "type"},
+    {label: "Адрес", value: "officialAddress"}
+  ];
+
+  selectedSortingType: any = "asc";
+  selectedSortingField: any = "id";
 
   countLowerAnnualTurnover() {
     this.organizationService.countLowerAnnualTurnover(this.form.value.annuaTurnoverLower).subscribe(
@@ -253,10 +275,30 @@ export class OrganizationComponent implements OnInit {
   }
 
   findSubstring() {
-
+    this.getOrganizations();
   }
 
   uniqueLowerAnnualTurnover() {
-
+    this.organizationService.uniqueAnnualTurnovers().subscribe(
+      data => {
+        let description = data.description;
+        let status = data.status;
+        let result = data.object;
+        if (status != undefined && status == "OK") {
+          this.msg.add({severity:'success', summary: status, detail: description != undefined ? description : 'Операция выполнена'});
+          if (result != undefined) {
+            window.alert("Список уникальных годовых оборотов: " + result?.join(", "));
+          } else {
+            window.alert("Список пуст!");
+          }
+        } else if (status != undefined) {
+          this.msg.add({severity:'error', summary: status, detail: description != undefined ? description : 'Неизвестная ошибка!'});
+        } else {
+          this.msg.add({severity: 'error', summary: 'Сообщение', detail: 'Неизвестная ошибка data!'});
+        }
+      }, error => {
+        this.dispatchError(error);
+      }
+    );
   }
 }

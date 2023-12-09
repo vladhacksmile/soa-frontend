@@ -1,12 +1,12 @@
-<p-toast></p-toast>
 <div class="header">
+  <p-toast></p-toast>
   <p-button (click)="showCreate()" icon="pi pi-external-link" label="Добавить организацию"></p-button>
   <div class = header-buttons>
-    <p-dropdown [options]="sortingType" [(ngModel)]="selectedSortingType" [showClear]="true" placeholder="Тип сортировки"></p-dropdown>
-    <p-dropdown [options]="sortingField" [(ngModel)]="selectedSortingField" [showClear]="true" placeholder="Поле для сортировки"></p-dropdown>
+    <p-dropdown [options]="sortingType" [(ngModel)]="selectedSortingType" [showClear]="true" placeholder="Тип сортировки" (onChange)="getOrganizations()"></p-dropdown>
+    <p-dropdown [options]="sortingField" [(ngModel)]="selectedSortingField" [showClear]="true" placeholder="Поле для сортировки" (onChange)="getOrganizations()"></p-dropdown>
     <div class="p-input-icon-left">
       <i class="pi pi-search"></i>
-      <input type="text" pInputText placeholder="Global Search" />
+      <input type="text" pInputText placeholder="Поиск по имени" [(ngModel)]="searchTerm" (keyup.enter)="findSubstring()"/>
     </div>
     <p-button (click)="findSubstring()">Поиск</p-button>
     <p-button (click)="countLowerAnnualTurnover()">Меньший оборот</p-button>
