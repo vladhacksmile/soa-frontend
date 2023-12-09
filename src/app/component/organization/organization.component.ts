@@ -380,7 +380,7 @@ export class OrganizationComponent implements OnInit {
         this.editEmployeeUserName = this.selectedEmployee?.userName;
         this.editEmployeeFirstName = this.selectedEmployee?.firstName;
         this.editEmployeeLastName = this.selectedEmployee?.lastName;
-        this.editEmployeeEmail = this.selectedEmployee?.userName;
+        this.editEmployeeEmail = this.selectedEmployee?.email;
     }
 
     toggleEdit() {
