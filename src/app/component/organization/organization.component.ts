@@ -38,7 +38,7 @@ export class OrganizationComponent implements OnInit {
       coordinateY: 0,
       creationDate: "",
       annualTurnover: 0,
-      type: OrganizationType.PUBLIC,
+      type: "PUBLIC",
       officialAddress: "",
       annualTurnoverLower: 0
     })
@@ -48,9 +48,12 @@ export class OrganizationComponent implements OnInit {
     this.getOrganizations();
   }
 
-  onSubmit(): void{
+  onCreate(): void{
+    console.log(this.selectedType)
+    console.log(this.editOrganizationType)
+    console.log(this.form.value.type)
     this.organizationService.createOrganization(new OrganizationRequest(this.form.value.name,
-      this.form.value.coordinateX, this.form.value.coordinateY, this.form.value.annualTurnover, this.form.value.type,
+      this.form.value.coordinateX, this.form.value.coordinateY, this.form.value.annualTurnover, this.selectedType,
       this.form.value.officialAddress)).subscribe(
       data => {
         let description = data.description;
@@ -92,6 +95,11 @@ export class OrganizationComponent implements OnInit {
       }
     }
   }
+
+  onCreationTypeChange(event: any) {
+    this.selectedType = event.value;
+  }
+
   public isResult(obj: any): obj is Result<any> {
     return obj && obj.status !== undefined;
   }
@@ -99,7 +107,7 @@ export class OrganizationComponent implements OnInit {
   onUpdate(): void{
     console.log(this.selectedOrganization?.id)
     this.organizationService.updateOrganization(new OrganizationRequest(this.form.value.name,
-      this.form.value.coordinateX, this.form.value.coordinateY, this.form.value.annualTurnover, this.form.value.type,
+      this.form.value.coordinateX, this.form.value.coordinateY, this.form.value.annualTurnover, "" + this.editOrganizationType?.toString(),
       this.form.value.officialAddress, this.selectedOrganization?.id)).subscribe(
       data => {
         let description = data.description;
@@ -156,27 +164,41 @@ export class OrganizationComponent implements OnInit {
 
   showCreate() {
     this.visibleCreate = !this.visibleCreate;
+    this.selectedOrganization = null;
+    this.editName = '';
+    this.editCoordinateX = 0;
+    this.editCoordinateY = 0;
+    this.editAnnualTurnover = 0;
+    this.editOrganizationType = "PUBLIC";
+    this.editOfficialAddress = '';
+
+    this.form.value.nam = '';
+    this.form.value.coordinateX = 0;
+    this.form.value.coordinateY = 0;
+    this.form.value.creationDate = '';
+    this.form.value.annualTurnover = 0;
+    this.form.value.type = "PUBLIC";
+    this.form.value.officialAddress = '';
+    this.form.value.annualTurnoverLower = 0;
   }
 
   editName: string | undefined = "";
   editCoordinateX: number | undefined = 0;
   editCoordinateY: number | undefined = 0;
   editAnnualTurnover: number | undefined = 0;
-  editOrganizationType: string | undefined = "TRUST";
+  editOrganizationType: string | undefined = "PUBLIC";
   editOfficialAddress: string | undefined = ""
 
   showEdit(event: any) {
     this.toggleEdit();
     this.selectedOrganization = event;
-    this.editName = this.selectedOrganization?.name
-    this.editCoordinateX = this.selectedOrganization?.coordinateX
-    this.editCoordinateY = this.selectedOrganization?.coordinateY
-    this.editAnnualTurnover = this.selectedOrganization?.annualTurnover
-    console.log(this.selectedOrganization?.type + " " + typeof this.selectedOrganization?.type)
-    this.editOrganizationType = String(this.selectedOrganization?.type)
-    console.log("Изменённый " + this.editOrganizationType + " " + typeof this.editOrganizationType)
-    this.editOfficialAddress = this.selectedOrganization?.officialAddress
-    console.log(this.selectedOrganization)
+    this.editName = this.selectedOrganization?.name;
+    this.editCoordinateX = this.selectedOrganization?.coordinateX;
+    this.editCoordinateY = this.selectedOrganization?.coordinateY;
+    this.editAnnualTurnover = this.selectedOrganization?.annualTurnover;
+    this.editOrganizationType = this.selectedOrganization?.type.toString();
+    this.form.value.type = this.editOrganizationType;
+    this.editOfficialAddress = this.selectedOrganization?.officialAddress;
   }
 
   toggleEdit() {
@@ -234,7 +256,6 @@ export class OrganizationComponent implements OnInit {
     )
   }
 
-  protected readonly OrganizationType = OrganizationType;
   // organizationType = ["PUBLIC", "GOVERNMENT", "TRUST", "PRIVATE_LIMITED_COMPANY", "OPEN_JOINT_STOCK_COMPANY"];
   organizationType = [
     {label: "Публичный", value: "PUBLIC"},
