@@ -56,6 +56,10 @@ export class OrganizationComponent implements OnInit {
       this.msg.add({severity:'error', summary: "Validation error", detail: 'X должен быть больше -962'});
       return
     }
+    if (this.form.value.annualTurnover < 1) {
+      this.msg.add({severity:'error', summary: "Validation error", detail: 'Годовой оборот должен быть больше 0'});
+      return
+    }
     this.organizationService.createOrganization(new OrganizationRequest(this.form.value.name,
       this.form.value.coordinateX, this.form.value.coordinateY, this.form.value.annualTurnover, this.selectedType,
       this.form.value.officialAddress)).subscribe(
@@ -110,6 +114,18 @@ export class OrganizationComponent implements OnInit {
 
   onUpdate(): void{
     console.log(this.selectedOrganization?.id)
+    if (this.form.value.name == "") {
+      this.msg.add({severity:'error', summary: "Validation error", detail: 'У организации должно быть название'});
+      return
+    }
+    if (this.form.value.coordinateX < -963) {
+      this.msg.add({severity:'error', summary: "Validation error", detail: 'X должен быть больше -962'});
+      return
+    }
+    if (this.form.value.annualTurnover < 1) {
+      this.msg.add({severity:'error', summary: "Validation error", detail: 'Годовой оборот должен быть больше 0'});
+      return
+    }
     this.organizationService.updateOrganization(new OrganizationRequest(this.form.value.name,
       this.form.value.coordinateX, this.form.value.coordinateY, this.form.value.annualTurnover, "" + this.editOrganizationType?.toString(),
       this.form.value.officialAddress, this.selectedOrganization?.id)).subscribe(
@@ -285,6 +301,10 @@ export class OrganizationComponent implements OnInit {
   selectedSortingField: any = "id";
 
   countLowerAnnualTurnover() {
+    if (this.form.value.annualTurnoverLower < 1) {
+      this.msg.add({severity:'error', summary: "Validation error", detail: 'Введите число больше чем 0'});
+      return
+    }
     this.organizationService.countLowerAnnualTurnover(this.form.value.annualTurnoverLower).subscribe(
       data => {
         let description = data.description;
